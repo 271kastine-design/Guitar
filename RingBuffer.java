@@ -34,17 +34,19 @@ public class RingBuffer
         return size == capacity;
     }
     
-    public void add(double value)
+    public void add(double value) throws QueueOverflowException
     {
-        if(!(size++ > capacity)){
-            buffer.add(value);
+        if(isFull()){
+            throw new QueueOverflowException("This exceeds ring buffer capacity!");
         }
+        buffer.add(value);
+        size++;
     }
     
     public double peek() throws QueueUnderflowException
     {
         if(isEmpty()){
-            throw new QueueUnderflowException("The ring buffer is empty!")
+            throw new QueueUnderflowException("The ring buffer is empty!");
         }
         else{
             return buffer.peek();
@@ -56,11 +58,13 @@ public class RingBuffer
         if(isEmpty()){
             throw new QueueUnderflowException("Ring buffer is empty!");
         }
-        return buffer.remove();
+        double value = buffer.remove();
+        size--;
+        return value;
     }
     
     // a simple test of the constructor and methods in RingBuffer
-    public static void main(String[] args) 
+    public static void main(String[] args) throws QueueUnderflowException, QueueOverflowException
     {
         int capacity = 100;
         RingBuffer buffer = new RingBuffer(capacity);  
