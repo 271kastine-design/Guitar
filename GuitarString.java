@@ -15,6 +15,9 @@ public class GuitarString
         this.frequency = frequency;
         capacity = (int) Math.ceil(44100.0 / frequency);
         buffer = new RingBuffer(capacity);
+        for (int i = 0; i < capacity; i++) {
+            buffer.add(0.0);
+        }
         tic = 0;
     }
 
